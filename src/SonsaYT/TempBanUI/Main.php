@@ -3,24 +3,31 @@
 namespace SonsaYT\TempBanUI;
 
 use pocketmine\plugin\PluginBase;
-use pocketmine\Player;
+use pocketmine\player\Player;
 use pocketmine\command\Command;
 use pocketmine\command\CommandSender;
 use pocketmine\event\Listener;
-use pocketmine\event\player\PlayerPreLoginEvent;
+use pocketmine\event\player\PlayerLoginEvent;
 use pocketmine\event\entity\EntityDamageEvent;
 use pocketmine\event\entity\EntityDamageByEntityEvent;
+use pocketmine\network\mcpe\protocol\TextPacket;
 use pocketmine\utils\Config;
 use pocketmine\utils\TextFormat;
 
 class Main extends PluginBase implements Listener {
 	
-	public $staffList = [];
-	public $targetPlayer = [];
+	public array $staffList = [];
+	public array $targetPlayer = [];
 	
-    public function onEnable() {
-		$this->getServer()->getPluginManager()->registerEvents($this, $this);
+    public function onEnable(): void {
 		@mkdir($this->getDataFolder());
+
+		$this->getServer()->getPluginManager()->registerEvents($this, $this);
+		if(($cmd = $this->getServer()->getCommandMap()->getCommand("ban")) instanceof Command){
+			$this->getServer()->getCommandMap()->unregister($cmd);
+		}
+		$this->getServer()->getCommandMap()->register($this->getName(), new BanCommand($this));
+
 		$this->db = new \SQLite3($this->getDataFolder() . "TempBanUI.db");
 		$this->db->exec("CREATE TABLE IF NOT EXISTS banPlayers(player TEXT PRIMARY KEY, banTime INT, reason TEXT, staff TEXT);");
 		$this->message = (new Config($this->getDataFolder() . "Message.yml", Config::YAML, array(
@@ -44,39 +51,10 @@ class Main extends PluginBase implements Listener {
 	
     public function onCommand(CommandSender $sender, Command $cmd, string $label,array $args) : bool {
 		switch($cmd->getName()){
-			case "tban":
-				if($sender instanceof Player) {
-					if($sender->hasPermission("use.tban")){
-						if(count($args) == 0){
-							$this->openPlayerListUI($sender);
-						}
-						if(count($args) == 1){
-							if($args[0] == "on"){
-								if(!isset($this->staffList[$sender->getName()])){
-									$this->staffList[$sender->getName()] = $sender;
-									$sender->sendMessage($this->message["BanModeOn"]);
-								}
-							} else if ($args[0] == "off"){
-								if(isset($this->staffList[$sender->getName()])){
-									unset($this->staffList[$sender->getName()]);
-									$sender->sendMessage($this->message["BanModeOff"]);
-								}
-							} else {
-								$this->targetPlayer[$sender->getName()] = $args[0];
-								$this->openTbanUI($sender);
-							}
-						}
-					}
-				}
-				else{
-					$sender->sendMessage(TextFormat::RED . "Use this Command in-game.");
-					return true;
-				}
-			break;
 			case "tcheck":
 				if($sender instanceof Player) {
-					if($sender->hasPermission("use.tcheck")){
-						$this->openTcheckUI($sender);
+					if($sender->hasPermission("tempban.command.tcheck")){
+						$this->openTcheckForm($sender);
 					}
 				}
 			break;
@@ -86,6 +64,7 @@ class Main extends PluginBase implements Listener {
 	
 	public function openPlayerListUI($player){
 		$api = $this->getServer()->getPluginManager()->getPlugin("FormAPI");
+		/** @var FormAPI $api */
 		$form = $api->createSimpleForm(function (Player $player, $data = null){
 			$target = $data;
 			if($target === null){
@@ -109,7 +88,7 @@ class Main extends PluginBase implements Listener {
 			$victim = $event->getEntity();
 			if($damager instanceof Player && $victim instanceof Player){
 				if(isset($this->staffList[$damager->getName()])){
-					$event->setCancelled(true);
+					$event->cancel();
 					$this->targetPlayer[$damager->getName()] = $victim->getName();
 					$this->openTbanUI($damager);
 				}
@@ -119,6 +98,7 @@ class Main extends PluginBase implements Listener {
 	
 	public function openTbanUI($player){
 		$api = $this->getServer()->getPluginManager()->getPlugin("FormAPI");
+		/** @var FormAPI $api */
 		$form = $api->createCustomForm(function (Player $player, array $data = null){
 			$result = $data[0];
 			if($result === null){
@@ -164,8 +144,82 @@ class Main extends PluginBase implements Listener {
 		return $form;
 	}
 
+	public function openTcheckForm($player){
+		$api = $this->getServer()->getPluginManager()->getPlugin("FormAPI");
+		/** @var FormAPI $api */
+		$form = $api->createSimpleForm(function (Player $player, ?int $data = null){
+			if($data ===null){
+				return;
+			}
+			
+			switch ($data){
+				case 0:
+					$this->OpenTCheckSearchForm($player);
+					break;
+				case 1:
+					$this->openTcheckUI($player);
+					break;
+			}
+		});
+
+		$form->setTitle("TCheck Form");
+
+		$form->addButton("Search by name");
+		$form->addButton("Select form list");
+
+		$form->sendToPlayer($player);
+	}
+
+	public function OpenTCheckSearchForm(Player $player){
+		$api = $this->getServer()->getPluginManager()->getPlugin("FormAPI");
+		/** @var FormAPI $api */
+		$form = $api->createCustomForm(function (Player $player, $data = null){
+			if($data === null){
+				return false;
+			}
+
+			$name = null;
+			if(isset($data[0])){
+				$name = $data[0];
+			}
+			
+			if($name == null){
+				$player->sendMessage(TextFormat::RED . "Please enter a valid name!");
+				return false;
+			}
+
+			$banInfo = $this->db->query("SELECT * FROM banPlayers;");
+			$i = -1;
+
+			$players = [];
+
+			while ($resultArr = $banInfo->fetchArray(SQLITE3_ASSOC)) {
+				$j = $i + 1;
+				$banPlayer = $resultArr['player'];
+				$players[] = strtolower($banPlayer);
+				$i = $i + 1;
+			}
+
+			echo $name . "\n";
+			print_r($players);
+			if(in_array(strtolower($name), $players)){
+				$this->targetPlayer[$player->getName()] = $name;
+				$this->openInfoUI($player);
+			} else {
+				$player->sendMessage(TextFormat::RED . "Player are not banned or not exist!");
+			}
+		});
+
+		$form->setTitle("TCSearch Form");
+
+		$form->addInput("Name", "", "");
+
+		$form->sendToPlayer($player);
+	}
+
 	public function openTcheckUI($player){
 		$api = $this->getServer()->getPluginManager()->getPlugin("FormAPI");
+		/** @var FormAPI $api */
 		$form = $api->createSimpleForm(function (Player $player, $data = null){
 			if($data === null){
 				return true;
@@ -183,18 +237,29 @@ class Main extends PluginBase implements Listener {
 		$form->setContent($this->message["BanListContent"]);
 		$banInfo = $this->db->query("SELECT * FROM banPlayers;");
 		$i = -1;
+
+		$players = [];
+
 		while ($resultArr = $banInfo->fetchArray(SQLITE3_ASSOC)) {
 			$j = $i + 1;
 			$banPlayer = $resultArr['player'];
-			$form->addButton(TextFormat::BOLD . "$banPlayer", -1, "", $banPlayer);
+			$players[] = $banPlayer;
 			$i = $i + 1;
 		}
+
+		sort($players);
+
+		foreach ($players as $pp){
+			$form->addButton(TextFormat::BOLD . "$pp", -1, "", $pp);
+		}
+
 		$form->sendToPlayer($player);
 		return $form;
 	}
 	
 	public function openInfoUI($player){
 		$api = $this->getServer()->getPluginManager()->getPlugin("FormAPI");
+		/** @var FormAPI $api */
 		$form = $api->createSimpleForm(function (Player $player, int $data = null){
 		$result = $data;
 		if($result === null){
@@ -248,7 +313,7 @@ class Main extends PluginBase implements Listener {
 		return $form;
 	}
 	
-	public function onPlayerLogin(PlayerPreLoginEvent $event){
+	public function onPlayerLogin(PlayerLoginEvent $event){
 		$player = $event->getPlayer();
 		$banplayer = $player->getName();
 		$banInfo = $this->db->query("SELECT * FROM banPlayers WHERE player = '$banplayer';");
@@ -267,7 +332,7 @@ class Main extends PluginBase implements Listener {
 				$minute = floor($minuteSec / 60);
 				$remainingSec = $minuteSec % 60;
 				$second = ceil($remainingSec);
-				$player->close("", str_replace(["{day}", "{hour}", "{minute}", "{second}", "{reason}", "{staff}"], [$day, $hour, $minute, $second, $reason, $staff], $this->message["LoginBanMessage"]));
+				$player->kick(str_replace(["{day}", "{hour}", "{minute}", "{second}", "{reason}", "{staff}"], [$day, $hour, $minute, $second, $reason, $staff], $this->message["LoginBanMessage"]));
 			} else {
 				$this->db->query("DELETE FROM banPlayers WHERE player = '$banplayer';");
 			}
