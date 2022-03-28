@@ -1,14 +1,16 @@
-name: TempBanUI
+name: TempBan
 main: SonsaYT\TempBanUI\Main
-api: [3.0.0, 4.0.0]
-version: 2.3
-author: SonsaYT
+api: [4.0.0]
+version: 2.4.0
+authors: [SonsaYT, Laith98Dev]
 
 commands:
- tban:
-  description: "Open TempBanUI"
-  permission: use.tban
-  
  tcheck:
   description: "Check ban list"
-  permission: use.tcheck
+  permission: tempban.command.tcheck
+
+permissions:
+  tempban.command:
+    default: op
+  tempban.command.tcheck:
+    default: op
