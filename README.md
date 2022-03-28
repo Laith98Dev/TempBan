@@ -6,9 +6,9 @@
 ---
 
 ## HOW TO INSTALL
-* Step 1: Download [TempBanUI.phar](https://later)
+* Step 1: Download [TempBanUI.phar](https://poggit.pmmp.io/ci/SonsaYT04/TempBanUI)
 * Step 2: Put it on your plugins folder
-* Step 3: Download [FormAPI.phar](http://later)
+* Step 3: Download [FormAPI.phar](https://cdn.discordapp.com/attachments/626213159283458048/958077806460428348/FormAPI_v1.4.0.phar)
 * Step 4: Put it on your plugins folder
 * Step 5: Restart your server
 
