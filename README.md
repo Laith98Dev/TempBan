@@ -1,14 +1,14 @@
-# TempBanUI - Twitter: [@RealSonsaYT](https://twitter.com/RealSonsaYT)
-
+# TempBanUI 
 ## Advance Temporary Ban with UI
+
 ## [What's new? Click me!](https://github.com/SonsaYT04/TempBanUI/wiki)
 
 ---
 
 ## HOW TO INSTALL
-* Step 1: Download [TempBanUI.phar](https://poggit.pmmp.io/r/51162/TempBanUI_dev-83.phar)
+* Step 1: Download [TempBanUI.phar](https://later)
 * Step 2: Put it on your plugins folder
-* Step 3: Download [FormAPI.phar](http://festyy.com/wHIglq)
+* Step 3: Download [FormAPI.phar](http://later)
 * Step 4: Put it on your plugins folder
 * Step 5: Restart your server
 
@@ -32,17 +32,17 @@ OR
 
 ---
 
-## COMMANDS & PERMISSIONS
-| COMMAND | DESCRIPTION | PERMISSION |
-|---|---|---|
-| /tban | Open player list | use.tban |
-| /tban <on - off> | Turn on/off hit ban | use.tban |
-| /tban name | Ban player using name | use.tban |
-| /tcheck | Check ban list | use.tcheck |
+## Commands & Permissions & Aliases
+| COMMAND | DESCRIPTION | PERMISSION | Aliases
+|---|---|---|---
+| /tban | Open player list | tempban.command | /ban |
+| /tban <on - off> | Turn on/off hit ban | tempban.command | |
+| /tban name | Ban player using name | tempban.command | |
+| /tcheck | Check ban list | tempban.command.tcheck | |
 
 ---
 
-## FEATURES
+## Features
 * Ban Player Temporary
 * Check Ban List
 * UnBan Player
@@ -51,7 +51,12 @@ OR
 
 ---
 
-## IMAGE
+## Images
 ![](https://github.com/SonsaYT04/Image/blob/master/Image/Image1.png)
 ![](https://github.com/SonsaYT04/Image/blob/master/Image/Image2.png)
 
+## Producers
+- [@RealSonsaYT](https://twitter.com/RealSonsaYT)
+
+## Contributors
+- [@Laith98Dev](https://github.com/Laith98Dev)
