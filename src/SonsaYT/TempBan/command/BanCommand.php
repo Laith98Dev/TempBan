@@ -31,7 +31,7 @@ class BanCommand extends Command implements PluginOwned {
             if(count($args) == 1){
                 if($args[0] == "on"){
                     if(!isset($this->plugin->staffList[$sender->getName()])){
-                        $this->staffList[$sender->getName()] = $sender;
+                        $this->plugin->staffList[$sender->getName()] = $sender;
                         $sender->sendMessage($this->plugin->message["BanModeOn"]);
                     }
                 } else if ($args[0] == "off"){
