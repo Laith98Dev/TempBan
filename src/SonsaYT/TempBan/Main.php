@@ -17,9 +17,9 @@ use pocketmine\utils\TextFormat;
 use SonsaYT\TempBan\command\BanCommand;
 use SonsaYT\TempBan\command\TCheckCommand;
 
-use jojoe77777\FormAPI\SimpleForm;
-use jojoe77777\FormAPI\CustomForm;
-use jojoe77777\FormAPI\ModalForm;
+use SonsaYT\TempBan\libs\jojoe77777\FormAPI\SimpleForm;
+use SonsaYT\TempBan\libs\jojoe77777\FormAPI\CustomForm;
+use SonsaYT\TempBan\libs\jojoe77777\FormAPI\ModalForm;
 
 use SQLite3;
 
