@@ -269,6 +269,7 @@ class Main extends PluginBase implements Listener {
 		$banPlayer = $this->targetPlayer[$player->getName()];
 		$banInfo = $this->db->query("SELECT * FROM banPlayers WHERE player = '$banPlayer';");
 		$array = $banInfo->fetchArray(SQLITE3_ASSOC);
+		$text = TextFormat::RED . "An error with load " . $banPlayer . " ban data!";
 		if (!empty($array)) {
 			$banTime = $array['banTime'];
 			$reason = $array['reason'];
@@ -293,9 +294,11 @@ class Main extends PluginBase implements Listener {
 			$minute = floor($minuteSec / 60);
 			$remainingSec = $minuteSec % 60;
 			$second = ceil($remainingSec);
+			
+			$text = str_replace(["{day}", "{hour}", "{minute}", "{second}", "{reason}", "{staff}"], [$day, $hour, $minute, $second, $reason, $staff], $this->message["InfoUIContent"]);
 		}
 		$form->setTitle(TextFormat::BOLD . $banPlayer);
-		$form->setContent(str_replace(["{day}", "{hour}", "{minute}", "{second}", "{reason}", "{staff}"], [$day, $hour, $minute, $second, $reason, $staff], $this->message["InfoUIContent"]));
+		$form->setContent($text);
 		$form->addButton($this->message["InfoUIUnBanButton"]);
 		$form->sendToPlayer($player);
 		return $form;
