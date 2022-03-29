@@ -1,13 +1,8 @@
 name: TempBan
-main: SonsaYT\TempBanUI\Main
+main: SonsaYT\TempBan\Main
 api: [4.0.0]
 version: 2.4.0
 authors: [SonsaYT, Laith98Dev]
-
-commands:
- tcheck:
-  description: "Check ban list"
-  permission: tempban.command.tcheck
 
 permissions:
   tempban.command:
