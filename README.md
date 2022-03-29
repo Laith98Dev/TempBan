@@ -1,20 +1,9 @@
 # TempBanUI 
 ## Advance Temporary Ban with UI
 
-## [What's new? Click me!](https://github.com/SonsaYT04/TempBanUI/wiki)
-
 ---
 
-## HOW TO INSTALL
-* Step 1: Download [TempBanUI.phar](https://poggit.pmmp.io/ci/SonsaYT04/TempBanUI)
-* Step 2: Put it on your plugins folder
-* Step 3: Download [FormAPI.phar](https://cdn.discordapp.com/attachments/626213159283458048/958077806460428348/FormAPI_v1.4.0.phar)
-* Step 4: Put it on your plugins folder
-* Step 5: Restart your server
-
----
-
-## HOW TO USE
+## How to use
 * Step 1: Type /tban to open player list
 * Step 2: Select a player
 * Step 3: Choose how long do you want and click Submit
@@ -35,9 +24,9 @@ OR
 ## Commands & Permissions & Aliases
 | COMMAND | DESCRIPTION | PERMISSION | Aliases
 |---|---|---|---
-| /tban | Open player list | tempban.command | /ban |
-| /tban <on - off> | Turn on/off hit ban | tempban.command | |
-| /tban name | Ban player using name | tempban.command | |
+| /ban | Open player list | tempban.command | /tban |
+| /ban <on - off> | Turn on/off hit ban | tempban.command | |
+| /ban name | Ban player using name | tempban.command | |
 | /tcheck | Check ban list | tempban.command.tcheck | |
 
 ---
