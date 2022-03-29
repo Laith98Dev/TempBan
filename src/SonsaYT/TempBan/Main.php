@@ -70,6 +70,7 @@ class Main extends PluginBase implements Listener {
 			if($target === null){
 				return true;
 			}
+			
 			$this->targetPlayer[$player->getName()] = $target;
 			$this->openTbanUI($player);
 		});
@@ -98,10 +99,10 @@ class Main extends PluginBase implements Listener {
 	
 	public function openTbanUI($player){
 		$form = new CustomForm(function (Player $player, array $data = null){
-			$result = $data[0];
 			if($result === null){
 				return true;
 			}
+			$result = $data[0];
 			if(isset($this->targetPlayer[$player->getName()])){
 				if($this->targetPlayer[$player->getName()] == $player->getName()){
 					$player->sendMessage($this->message["BanMyself"]);
@@ -144,7 +145,7 @@ class Main extends PluginBase implements Listener {
 
 	public function openTcheckForm($player){
 		$form = new SimpleForm(function (Player $player, ?int $data = null){
-			if($data ===null){
+			if($data === null){
 				return;
 			}
 			
