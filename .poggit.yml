@@ -5,7 +5,4 @@ branches:
 projects:
   TempBan:
     path: ""
-    libs:
-    - src: jojoe77777/FormAPI/libFormAPI
-      version: ^2.1.0
 ...
