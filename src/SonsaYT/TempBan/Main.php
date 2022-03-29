@@ -17,10 +17,21 @@ use pocketmine\utils\TextFormat;
 use SonsaYT\TempBan\command\BanCommand;
 use SonsaYT\TempBan\command\TCheckCommand;
 
+use jojoe77777\FormAPI\SimpleForm;
+use jojoe77777\FormAPI\CustomForm;
+use jojoe77777\FormAPI\ModalForm;
+
+use SQLite3;
+
 class Main extends PluginBase implements Listener {
 	
 	public array $staffList = [];
+	
 	public array $targetPlayer = [];
+	
+	public SQLITE3 $db;
+	
+	public array $message = [];
 	
     public function onEnable(): void {
 		@mkdir($this->getDataFolder());
@@ -32,7 +43,7 @@ class Main extends PluginBase implements Listener {
 		$this->getServer()->getCommandMap()->register($this->getName(), new BanCommand($this));
 		$this->getServer()->getCommandMap()->register($this->getName(), new TCheckCommand($this));
 
-		$this->db = new \SQLite3($this->getDataFolder() . "TempBan.db");
+		$this->db = new SQLite3($this->getDataFolder() . "TempBan.db");
 		$this->db->exec("CREATE TABLE IF NOT EXISTS banPlayers(player TEXT PRIMARY KEY, banTime INT, reason TEXT, staff TEXT);");
 		$this->message = (new Config($this->getDataFolder() . "Message.yml", Config::YAML, array(
 			"BroadcastBanMessage" => "§b{player} §dhas been banned by §b{staff} §dfor §b{day} §dday/s, §b{hour} §dhour/s, §b{minute} §dminute/s. §dReason: §b{reason}",
@@ -54,9 +65,7 @@ class Main extends PluginBase implements Listener {
     }
 	
 	public function openPlayerListUI($player){
-		$api = $this->getServer()->getPluginManager()->getPlugin("FormAPI");
-		/** @var FormAPI $api */
-		$form = $api->createSimpleForm(function (Player $player, $data = null){
+		$form = new SimpleForm(function (Player $player, $data = null){
 			$target = $data;
 			if($target === null){
 				return true;
@@ -88,9 +97,7 @@ class Main extends PluginBase implements Listener {
 	}
 	
 	public function openTbanUI($player){
-		$api = $this->getServer()->getPluginManager()->getPlugin("FormAPI");
-		/** @var FormAPI $api */
-		$form = $api->createCustomForm(function (Player $player, array $data = null){
+		$form = new CustomForm(function (Player $player, array $data = null){
 			$result = $data[0];
 			if($result === null){
 				return true;
@@ -136,9 +143,7 @@ class Main extends PluginBase implements Listener {
 	}
 
 	public function openTcheckForm($player){
-		$api = $this->getServer()->getPluginManager()->getPlugin("FormAPI");
-		/** @var FormAPI $api */
-		$form = $api->createSimpleForm(function (Player $player, ?int $data = null){
+		$form = new SimpleForm(function (Player $player, ?int $data = null){
 			if($data ===null){
 				return;
 			}
@@ -162,9 +167,7 @@ class Main extends PluginBase implements Listener {
 	}
 
 	public function OpenTCheckSearchForm(Player $player){
-		$api = $this->getServer()->getPluginManager()->getPlugin("FormAPI");
-		/** @var FormAPI $api */
-		$form = $api->createCustomForm(function (Player $player, $data = null){
+		$form = new CustomForm(function (Player $player, $data = null){
 			if($data === null){
 				return false;
 			}
@@ -190,9 +193,7 @@ class Main extends PluginBase implements Listener {
 				$players[] = strtolower($banPlayer);
 				$i = $i + 1;
 			}
-
-			echo $name . "\n";
-			print_r($players);
+			
 			if(in_array(strtolower($name), $players)){
 				$this->targetPlayer[$player->getName()] = $name;
 				$this->openInfoUI($player);
@@ -209,9 +210,7 @@ class Main extends PluginBase implements Listener {
 	}
 
 	public function openTcheckUI($player){
-		$api = $this->getServer()->getPluginManager()->getPlugin("FormAPI");
-		/** @var FormAPI $api */
-		$form = $api->createSimpleForm(function (Player $player, $data = null){
+		$form = new SimpleForm(function (Player $player, $data = null){
 			if($data === null){
 				return true;
 			}
@@ -249,9 +248,7 @@ class Main extends PluginBase implements Listener {
 	}
 	
 	public function openInfoUI($player){
-		$api = $this->getServer()->getPluginManager()->getPlugin("FormAPI");
-		/** @var FormAPI $api */
-		$form = $api->createSimpleForm(function (Player $player, int $data = null){
+		$form = new SimpleForm(function (Player $player, int $data = null){
 		$result = $data;
 		if($result === null){
 			return true;
@@ -332,5 +329,4 @@ class Main extends PluginBase implements Listener {
 			unset($this->staffList[$player->getName()]);
 		}
 	}
-
 }
