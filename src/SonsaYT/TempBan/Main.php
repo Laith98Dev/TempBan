@@ -99,7 +99,7 @@ class Main extends PluginBase implements Listener {
 	
 	public function openTbanUI($player){
 		$form = new CustomForm(function (Player $player, array $data = null){
-			if($result === null){
+			if($data === null){
 				return true;
 			}
 			$result = $data[0];
