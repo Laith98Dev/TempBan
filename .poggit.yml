@@ -5,5 +5,5 @@ branches:
 projects:
   TempBan:
     path: ""
-    icon: ./images/20220331_173955.jpg
+    icon: /images/20220331_173955.jpg
 ...
