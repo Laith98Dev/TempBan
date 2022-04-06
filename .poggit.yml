@@ -6,4 +6,7 @@ projects:
   TempBan:
     path: ""
     icon: "./images/20220331_180103.png"
+    libs:
+      - src: poggit/libasynql/libasynql
+        version: ^4.0.1
 ...
