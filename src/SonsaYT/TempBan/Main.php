@@ -256,7 +256,6 @@ class Main extends PluginBase implements Listener {
 				
 				if(isset($rows[0])){
 					$all = $rows;
-					var_dump($all);
 				}
 				
 				$players = [];
@@ -300,9 +299,7 @@ class Main extends PluginBase implements Listener {
 			$all = [];
 			
 			if(isset($rows[0])){
-				// var_dump($rows);
 				$all = $rows;
-				var_dump($all);
 			}
 			
 			if (empty($all)) {
@@ -344,7 +341,6 @@ class Main extends PluginBase implements Listener {
 			
 			if(isset($rows[0])){
 				$banInfo = $rows[0];
-				var_dump($banInfo);
 			}
 			
 			$form = new SimpleForm(function (Player $player, int $data = null) use ($banInfo, $banplayer){
@@ -414,7 +410,6 @@ class Main extends PluginBase implements Listener {
 			
 			if(isset($rows[0])){
 				$banInfo = $rows[0];
-				var_dump($banInfo);
 			}
 			
 			if (!empty($banInfo)) {
