@@ -52,7 +52,6 @@ class Main extends PluginBase implements Listener {
 	
 	public array $targetPlayer = [];
 	
-	/** @var libasynql */
 	public $db;
 	
 	/** @var Config */
