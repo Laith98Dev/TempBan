@@ -356,7 +356,7 @@ class Main extends PluginBase implements Listener {
 				switch($result){
 					case 0:
 						if (!empty($banInfo)) {
-							$this->db->executeSelect(self::DB_UNBAN_PLAYER, ["player" => $banplayer], function(array $rows) use ($player): void {
+							$this->db->executeSelect(self::DB_UNBAN_PLAYER, ["player" => $banplayer], function(array $rows) use ($player, $banplayer): void {
 								$player->sendMessage(str_replace(["{player}"], [$banplayer], $this->message["UnBanPlayer"]));
 							});
 						}
@@ -376,7 +376,7 @@ class Main extends PluginBase implements Listener {
 				
 				if($banTime < $now){
 					$banplayer = $this->targetPlayer[$player->getName()];
-					$this->db->executeSelect(self::DB_UNBAN_PLAYER, ["player" => $banplayer], function(array $rows) use ($player) : void {
+					$this->db->executeSelect(self::DB_UNBAN_PLAYER, ["player" => $banplayer], function(array $rows) use ($player, $banplayer) : void {
 						$player->sendMessage(str_replace(["{player}"], [$banplayer], $this->message["AutoUnBanPlayer"]));
 					});
 					
