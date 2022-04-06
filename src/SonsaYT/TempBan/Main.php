@@ -55,6 +55,9 @@ class Main extends PluginBase implements Listener {
 	/** @var libasynql */
 	public $db;
 	
+	/** @var Config */
+	public $cfg;
+	
 	public array $message = [];
 	
     public function onEnable(): void {
