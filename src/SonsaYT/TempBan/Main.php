@@ -260,6 +260,7 @@ class Main extends PluginBase implements Listener {
 				}
 				
 				$players = [];
+				$i = -1;
 				
 				foreach ($all as $resultArr){
 					$j = $i + 1;
@@ -311,7 +312,7 @@ class Main extends PluginBase implements Listener {
 			
 			$form->setTitle($this->message["BanListTitle"]);
 			$form->setContent($this->message["BanListContent"]);
-						
+			
 			$i = -1;
 
 			$players = [];
@@ -375,11 +376,9 @@ class Main extends PluginBase implements Listener {
 				
 				if($banTime < $now){
 					$banplayer = $this->targetPlayer[$player->getName()];
-					if(!empty($banInfo)){
-						$this->db->executeSelect(self::DB_UNBAN_PLAYER, ["player" => $banplayer], function(array $rows) use ($player) : void {
-							$player->sendMessage(str_replace(["{player}"], [$banplayer], $this->message["AutoUnBanPlayer"]));
-						});
-					}
+					$this->db->executeSelect(self::DB_UNBAN_PLAYER, ["player" => $banplayer], function(array $rows) use ($player) : void {
+						$player->sendMessage(str_replace(["{player}"], [$banplayer], $this->message["AutoUnBanPlayer"]));
+					});
 					
 					unset($this->targetPlayer[$player->getName()]);
 					return;
