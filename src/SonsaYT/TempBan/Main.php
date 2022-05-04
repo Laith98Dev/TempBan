@@ -33,8 +33,8 @@ use pocketmine\utils\TextFormat;
 use SonsaYT\TempBan\command\BanCommand;
 use SonsaYT\TempBan\command\TCheckCommand;
 
-use jojoe77777\FormAPI\SimpleForm;
-use jojoe77777\FormAPI\CustomForm;
+use Vecnavium\FormsUI\SimpleForm;
+use Vecnavium\FormsUI\CustomForm;
 
 use poggit\libasynql\libasynql;
 use poggit\libasynql\SqlError;
