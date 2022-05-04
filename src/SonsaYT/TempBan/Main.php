@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace SonsaYT\TempBan;
 
 /*
@@ -21,21 +23,18 @@ namespace SonsaYT\TempBan;
 use pocketmine\plugin\PluginBase;
 use pocketmine\player\Player;
 use pocketmine\command\Command;
-use pocketmine\command\CommandSender;
 use pocketmine\event\Listener;
 use pocketmine\event\player\PlayerLoginEvent;
 use pocketmine\event\entity\EntityDamageEvent;
 use pocketmine\event\entity\EntityDamageByEntityEvent;
-use pocketmine\network\mcpe\protocol\TextPacket;
 use pocketmine\utils\Config;
 use pocketmine\utils\TextFormat;
 
 use SonsaYT\TempBan\command\BanCommand;
 use SonsaYT\TempBan\command\TCheckCommand;
 
-use SonsaYT\TempBan\libs\jojoe77777\FormAPI\SimpleForm;
-use SonsaYT\TempBan\libs\jojoe77777\FormAPI\CustomForm;
-use SonsaYT\TempBan\libs\jojoe77777\FormAPI\ModalForm;
+use jojoe77777\FormAPI\SimpleForm;
+use jojoe77777\FormAPI\CustomForm;
 
 use poggit\libasynql\libasynql;
 use poggit\libasynql\SqlError;
@@ -54,8 +53,7 @@ class Main extends PluginBase implements Listener {
 	
 	public $db;
 	
-	/** @var Config */
-	public $cfg;
+	public Config $cfg;
 	
 	public array $message = [];
 	
